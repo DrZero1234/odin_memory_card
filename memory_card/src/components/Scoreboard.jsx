@@ -16,7 +16,7 @@ const Scoreboard =  () => {
     }
 
     return(
-        <div id="scoreboard">
+        <div>
             <div id="current_score">
                 <h2>Current Score</h2>
                 <h1>{currentScore}</h1>
