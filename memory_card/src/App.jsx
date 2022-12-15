@@ -1,30 +1,13 @@
 import reactLogo from './assets/react.svg'
 import './App.css'
+import Game from "./components/Game.jsx"
 import React, { useState } from 'react';
 import Scoreboard from './components/Scoreboard';
-import crystal_maiden from "./images";
+import crystal_maiden from "./images/Crystal_maiden.png"
 
 function App() {
-
-    const [cardArr,setcardArr] = useState([]);
-
-    const handleAddingCard = (name) => {
-        setcardArr(([...cardArr,name]))
-    }
-
-    
-
-  return (
-    <div className="container">
-        <div id="scoreboard">
-            <Scoreboard />
-        </div>
-        <div id="gameboard">
-
-        </div>
-
-    </div>
-
+  return(
+    <Game />
   )
 }
 
