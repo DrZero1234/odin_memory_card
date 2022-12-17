@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Scoreboard from './Scoreboard';
 import Gameboard from './Gameboard';
-import Crystal_maiden from "../images/Crystal_maiden.png"
+import card_data from "../cards_data";
 
 function Game(props) {
-
-    const [level,setLevel] = useState(3);
-    const [cardsArr,setcardsArr] = useState([]);
-    const [selectedArr,setselectedArr] = useState([]);
+    let shuffled_cards = card_data.sort(() => Math.random() - 0.5);
+    const [currentScore,setcurrentScore] = useState(0);
+    const [highScore,sethighScore] = useState(0);
 
     const isUniqueCard = (name) => {
         return selectedArr.includes(name);
     }
+
+
+    useEffect(() => {
+        shuffled_cards =  card_data.sort(() => Math.random() - 0.5)
+    })
 
     const handleAddingCard = (name) => {
         if (isUniqueCard(name)) {
@@ -23,7 +27,6 @@ function Game(props) {
     }
 
     const resetGame = () => {
-        setLevel(3);
         setcardsArr([]);
         setselectedArr([]);
 
@@ -38,9 +41,12 @@ function Game(props) {
   return (
     <div className="container">
         <div id="scoreboard">
-            <Scoreboard />
+            <Scoreboard current_score = {currentScore} highscore = {highScore}/>
         </div>
-        <Gameboard />
+        <Gameboard shuffled_cards = {shuffled_cards} currentScore = {currentScore} setcurrentScore = {setcurrentScore} highScore = {highScore} sethighScore = {sethighScore}/>
+        <div id="footer">
+            <div></div>
+        </div>
     </div>
 
   )

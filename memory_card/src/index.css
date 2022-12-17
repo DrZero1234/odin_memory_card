@@ -63,11 +63,33 @@ button:focus-visible {
 
 #gameboard {
   grid-area: gameboard;
+  display: grid;
+  gap: 3em;
+  grid-template-columns: repeat(auto-fit,minmax(256px,1fr));
 }
 
 #footer {
   grid-area: footer;
+  background-color: #1a1a1a;
 }
+
+.card {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform .2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.card-label {
+  color: #f9f9f9;
+}
+
+
 
 .container {
   display: grid;
