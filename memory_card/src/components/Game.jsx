@@ -7,9 +7,27 @@ function Game(props) {
     let shuffled_cards = card_data.sort(() => Math.random() - 0.5);
     const [currentScore,setcurrentScore] = useState(0);
     const [highScore,sethighScore] = useState(0);
+    const [selectedArr,setselectedArr] = useState([]);
 
     const isUniqueCard = (name) => {
         return selectedArr.includes(name);
+    }
+
+    const isHighScore = () => {
+        if (currentScore > highScore) {
+            sethighScore(currentScore)
+        }
+    }
+
+    const handleCardClick = (name) => {
+        if (!isUniqueCard(name)) {
+            setcurrentScore(currentScore + 1)
+            setselectedArr([...selectedArr, name]);
+        } else {
+            setcurrentScore(0);
+            setselectedArr([]);
+        }
+        console.log(selectedArr);
     }
 
 
@@ -17,14 +35,7 @@ function Game(props) {
         shuffled_cards =  card_data.sort(() => Math.random() - 0.5)
     })
 
-    const handleAddingCard = (name) => {
-        if (isUniqueCard(name)) {
-            setcardArr(([...cardArr,name]))
-        }
-        else {
-            // TODO
-        }
-    }
+    useEffect(isHighScore,[currentScore])
 
     const resetGame = () => {
         setcardsArr([]);
@@ -43,7 +54,7 @@ function Game(props) {
         <div id="scoreboard">
             <Scoreboard current_score = {currentScore} highscore = {highScore}/>
         </div>
-        <Gameboard shuffled_cards = {shuffled_cards} currentScore = {currentScore} setcurrentScore = {setcurrentScore} highScore = {highScore} sethighScore = {sethighScore}/>
+        <Gameboard shuffled_cards = {shuffled_cards} setcurrentScore = {setcurrentScore}  sethighScore = {sethighScore} setselectedArr = {setselectedArr} handleCardClick = {handleCardClick}/>
         <div id="footer">
             <div></div>
         </div>

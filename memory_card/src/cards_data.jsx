@@ -67,6 +67,30 @@ const card_data = [
         label: "Zeus",
         attr: "int"
     },
+    {
+        id: 12,
+        filename: "Treant_Protector.png",
+        label: "Treant Protector",
+        attr: "str"
+    },
+    {
+        id: 13,
+        filename: "Earthshaker.png",
+        label: "Earthshaker",
+        attr: "str"
+    },
+    {
+        id: 14,
+        filename: "Phoenix.png",
+        label: "Phoenix",
+        attr: "str"
+    },
+    {
+        id: 15,
+        filename: "Mars.png",
+        label: "Mars",
+        attr: "str"
+    },
 
 ]
 
