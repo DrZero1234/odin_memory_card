@@ -46,7 +46,7 @@ const card_data = [
         {
         id: 8,
         filename: "Vengeful_spirit.png",
-        label: "Vengeful spirit",
+        label: "Vengeful Spirit",
         attr: "agi"
     },
         {

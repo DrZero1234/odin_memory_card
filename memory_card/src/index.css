@@ -65,6 +65,10 @@ img {
 
 #scoreboard {
   grid-area: scoreboard;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -105,6 +109,7 @@ img {
   grid-template-rows: auto;
   grid-template-columns: 1fr 8fr 1fr ;
   grid-template-areas: "header header scoreboard"
-                       "gameboard gameboard gameboard"
+                       "gameboard gameboard scoreboard"
                        "footer footer footer";
+  margin: 20px;
 }
