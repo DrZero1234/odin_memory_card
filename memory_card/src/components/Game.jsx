@@ -51,12 +51,20 @@ function Game(props) {
 
   return (
     <div className="container">
+        <div id="header">
+            <h1>Dota memory game</h1>
+        </div>
         <div id="scoreboard">
             <Scoreboard current_score = {currentScore} highscore = {highScore}/>
         </div>
         <Gameboard shuffled_cards = {shuffled_cards} setcurrentScore = {setcurrentScore}  sethighScore = {sethighScore} setselectedArr = {setselectedArr} handleCardClick = {handleCardClick}/>
         <div id="footer">
-            <div></div>
+            <div>
+                <div id="footer-content">
+                <span id="copyright-text">@Copyright 2022</span>
+                <a href='#'><img id="footer_logo" src="Footer_logo.png"></img></a>
+            </div>
+            </div>
         </div>
     </div>
 
