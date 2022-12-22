@@ -69,7 +69,7 @@ const card_data = [
     },
     {
         id: 12,
-        filename: "Treant_Protector.png",
+        filename: "Treant_protector.png",
         label: "Treant Protector",
         attr: "str"
     },

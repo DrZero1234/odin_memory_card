@@ -7,7 +7,7 @@ import Card from "./Card";
 const Gameboard =  (props) => {
     
     const {currentScore,setcurrentScore,highScore,sethighScore,handleCardClick} = props
-    const {shuffled_cards} = props 
+    const {cardsArr} = props 
 
     const display_gameboard = () => {
         
@@ -15,7 +15,7 @@ const Gameboard =  (props) => {
     
     return(
         <div id="gameboard">
-        {shuffled_cards.map((card) => (
+        {cardsArr.map((card) => (
             <Card id={card.id} filename={card.filename} label = {card.label} attr = {card.attr} key={card.id} handleCardClick = {handleCardClick} />
         ))}
         </div>

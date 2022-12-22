@@ -81,7 +81,6 @@ img {
 }
 
 #gameboard {
-  grid-area: gameboard;
   display: grid;
   gap: 3em;
   grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
@@ -121,6 +120,13 @@ img {
                        "footer footer footer";
   margin: 0px 20px;
   background-color: red;
+}
+
+#content-wrapper {
+  grid-area: gameboard;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 
