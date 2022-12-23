@@ -36,8 +36,11 @@ function Game(props) {
                 new_arr.push(random_item)
             }
         }
+        setcardsArr(new_arr)
+    } else {
+        console.log("Lvl up clicked")
     }
-    setcardsArr(new_arr)
+
     }
 
     const nextRound = () => {
@@ -56,12 +59,15 @@ function Game(props) {
         if (!isUniqueCard(name)) {
             setcurrentScore(currentScore + 1)
             setselectedArr([...selectedArr, name]);
-            console.log(selectedArr)
+
         } else {
             resetGame()
         }
     }
 
+    useEffect(() => {
+        console.log(selectedArr)
+    })
     useEffect(shuffleCards)
     useEffect(fillCardsArr,[level])
     useEffect(isHighScore,[currentScore])
