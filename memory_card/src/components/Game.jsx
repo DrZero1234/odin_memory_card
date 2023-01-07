@@ -3,7 +3,7 @@ import Scoreboard from './Scoreboard';
 import Gameboard from './Gameboard';
 import card_data from "../cards_data";
 
-function Game(props) {
+const  Game = () => {
 
 
     const [level,setLevel] = useState(1);
@@ -37,10 +37,7 @@ function Game(props) {
             }
         }
         setcardsArr(new_arr)
-    } else {
-        console.log("Lvl up clicked")
     }
-
     }
 
     const nextRound = () => {
@@ -65,9 +62,6 @@ function Game(props) {
         }
     }
 
-    useEffect(() => {
-        console.log(selectedArr)
-    })
     useEffect(shuffleCards)
     useEffect(fillCardsArr,[level])
     useEffect(isHighScore,[currentScore])
@@ -97,7 +91,6 @@ function Game(props) {
         </div>
         <div id = "content-wrapper">
             <h2>Level {level}</h2>
-            <button onClick={levelUp}>Level up</button>
             <button onClick={resetGame}>Reset</button>
             <Gameboard cardsArr = {cardsArr} setcurrentScore = {setcurrentScore}  sethighScore = {sethighScore} setselectedArr = {setselectedArr} handleCardClick = {handleCardClick}/>
         </div>
