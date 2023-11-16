@@ -1,35 +1,24 @@
 import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+
+import styled from "styled-components";
+
+// API link: https://hp-api.onrender.com/
+
+export const Card = ({ wizard_data }) => {
+  const { name } = wizard_data;
+  return <h1>{name}</h1>;
+};
 
 function App() {
-  const ACTIVE_MOCK = [
-    {
-      id: 1,
-      image:
-        "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/antimage.png",
-      name_loc: "Anti-Mage",
-      primary_attr: 1,
-    },
-    {
-      id: 18,
-      image:
-        "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/sven.png",
-      name_loc: "Sven",
-      primary_attr: 0,
-    },
-  ];
-
   const [currentScore, setCurrentScore] = useState(0);
   const [maximumScore, setMaximumScore] = useState(0);
   const [activeCards, setActiveCards] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(5);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
-
-  const ACTIVE_IDS = activeCards.map((card) => card.id);
 
   const getLevelCards = () => {
     switch (true) {
@@ -51,45 +40,52 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    const random_id = Math.floor(Math.random() * 20);
-    if (activeCards.length < getLevelCards()) {
-      let arr_copy = activeCards.slice();
-      console.log(`Arr copy: ${arr_copy}`);
-      if (!arr_copy.includes(random_id)) {
-        arr_copy = [...arr_copy, random_id];
-        setActiveCards(arr_copy);
-      } else {
-        console.log(`Missed :${random_id}`);
-      }
-    }
-    console.log(activeCards);
-  }, [level, activeCards.length]);
-  /*
-  useEffect(() => {
-    for (let i = 0; i < getLevelCards()) {
-      const random_id = Math.floor(Math.random() * 120);
-      fetch(
-        `https://dota2-heroes.p.rapidapi.com/heroes/english/${random_id}`,
-        {
-          method: "GET",
-          headers: {
-            "X-RapidAPI-Key":
-              "1ec2ba9090msh3531ee83ce839c0p184e6cjsn8edc84a71631",
-            "X-RapidAPI-Host": "dota2-heroes.p.rapidapi.com",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (!ACTIVE_IDS.includes(random_id)) {
-            setActiveCards([...activeCards, data]);
-            console.log(random_id);
+  const shuffleActiveCards = () => {
+    let copy_arr = activeCards.sort((a, b) => 0.5 - Math.random());
+    setActiveCards(copy_arr);
+  };
+
+  const fetchData = async () => {
+    await fetch("https://hp-api.onrender.com/api/characters")
+      .then(async (response) => response.json())
+      .then(async (data) => {
+        const arr_range = 24;
+        let copy_arr = [];
+        let used_indexes = [];
+        while (copy_arr.length < getLevelCards()) {
+          let random_index = Math.floor(Math.random() * arr_range);
+          while (used_indexes.includes(random_index)) {
+            random_index = Math.floor(Math.random() * arr_range);
           }
-        });
-    }
+          copy_arr.push(data[random_index]);
+          used_indexes.push(random_index);
+        }
+        setActiveCards(copy_arr);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [level]);
-*/
+
+  useEffect(() => {
+    shuffleActiveCards();
+  }, [currentScore]);
+
+  return (
+    <div className="container">
+      <div className="header">Header</div>
+      <div className="main-content">
+        <div className="gameboard">
+          {activeCards.map((card) => {
+            console.log(card);
+            return <Card wizard_data={card} key={card.id} />;
+          })}
+        </div>
+      </div>
+      <div className="footer">Footer</div>
+    </div>
+  );
 }
 
 export default App;
