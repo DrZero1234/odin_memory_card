@@ -83,7 +83,8 @@ h6 {
 
 .gameboard {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto;
+    grid-template-columns: repeat(3, 1fr);
+    place-content: center;
     padding: 5em;
+    gap: 2em;
 }
