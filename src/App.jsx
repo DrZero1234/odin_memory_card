@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 
+import cardBg from "./assets/cardBg.jpg";
+
 import styled from "styled-components";
 
 // API link: https://hp-api.onrender.com/
@@ -11,9 +13,10 @@ const COLORS = {
   Slytherin: "#257b3f",
   Ravenclaw: "#0598b6",
   Hufflepuff: "#cb9c27",
+  Other: "#808080",
 };
 
-const StyledCard = styled.div`
+/*
   background-color: ${(props) =>
     props.house === "Slytherin"
       ? COLORS.Slytherin
@@ -23,29 +26,50 @@ const StyledCard = styled.div`
       ? COLORS.Ravenclaw
       : props.house === "Hufflepuff"
       ? COLORS.Hufflepuff
-      : null};
-  border: 2px solid black;
+      : COLORS.Other};
+*/
+
+const StyledCard = styled.div`
+  background-image: url(${cardBg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 10px solid black;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+
+  /* drop shadow */
+  -webkit-box-shadow: 0px 0px 0px 10px #fff;
+  -moz-box-shadow: 0px 0px 0px 10px #fff;
+  box-shadow: 0px 0px 0px 10px #fff;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  padding: 2em;
+  padding: 1em;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Card = ({ wizard_data }) => {
   const { name, house } = wizard_data;
   return (
     <StyledCard house={house}>
-      {wizard_data.image && (
-        <img
-          src={wizard_data.image}
-          style={{
-            height: "400px",
-            width: "400px",
-            objectFit: "cover",
-            order: -1,
-          }}
-        />
-      )}
-      <h1>{name}</h1>
+      <div className="card-content">
+        {wizard_data.image && (
+          <img
+            src={wizard_data.image}
+            style={{
+              display: "flex",
+              height: "200px",
+              width: "200px",
+              objectFit: "cover",
+              order: -1,
+            }}
+          />
+        )}
+        <h3>{name}</h3>
+      </div>
     </StyledCard>
   );
 };
@@ -55,7 +79,7 @@ function App() {
   const [maximumScore, setMaximumScore] = useState(0);
   const [activeCards, setActiveCards] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(2);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
 
@@ -114,13 +138,11 @@ function App() {
   return (
     <div className="container">
       <div className="header">Header</div>
-      <div className="main-content">
-        <div className="gameboard">
-          {activeCards.map((card) => {
-            console.log(card);
-            return <Card wizard_data={card} key={card.id} />;
-          })}
-        </div>
+      <div className="gameboard">
+        {activeCards.map((card) => {
+          console.log(card);
+          return <Card wizard_data={card} key={card.id} />;
+        })}
       </div>
       <div className="footer">Footer</div>
     </div>
