@@ -4,7 +4,13 @@ import viteLogo from "/vite.svg";
 
 import cardBg from "./assets/cardBg.jpg";
 
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+import hufflepuffLogo from "./assets/Hufflepuff.png";
+import slytherinLogo from "./assets/Slytherin.png";
+import gryffindorLogo from "./assets/Gryffindor.png";
+import ravenclawLogo from "./assets/Ravenclaw.png";
+import OtherLogo from "./assets/Other.png";
 
 // API link: https://hp-api.onrender.com/
 
@@ -17,7 +23,47 @@ const COLORS = {
 };
 
 /*
-  background-color: ${(props) =>
+  background-color: 
+*/
+
+const slideIn = keyframes`
+  from{
+    transform: scale(0);
+  } to {
+    transform: scale(1);
+  }
+`;
+
+const StyledCard = styled.div`
+  background-image: url(${cardBg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding: 1em;
+  font-family: Henny Penny, sans-serif;
+  transition: transform 0.2s ease-in;
+  animation: ${slideIn} 0.2s linear;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  h3 {
+    font-size: 2.5rem;
+  }
+`;
+
+const CardContent = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-style: solid;
+  border-width: 20px;
+  border-radius: 2em;
+  overflow: hide;
+  border-color: ${(props) =>
     props.house === "Slytherin"
       ? COLORS.Slytherin
       : props.house === "Gryffindor"
@@ -27,35 +73,35 @@ const COLORS = {
       : props.house === "Hufflepuff"
       ? COLORS.Hufflepuff
       : COLORS.Other};
-*/
+  padding: 0.5em;
+  letter-spacing: 0.2em;
 
-const StyledCard = styled.div`
-  background-image: url(${cardBg});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  border: 10px solid black;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-
-  /* drop shadow */
-  -webkit-box-shadow: 0px 0px 0px 10px #fff;
-  -moz-box-shadow: 0px 0px 0px 10px #fff;
-  box-shadow: 0px 0px 0px 10px #fff;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  padding: 1em;
-  justify-content: center;
-  align-items: center;
+  h3 {
+    text-align: center;
+  }
 `;
 
-export const Card = ({ wizard_data }) => {
+export const Card = ({ wizard_data, handleClick }) => {
   const { name, house } = wizard_data;
+
+  const logoSrc =
+    house === "Hufflepuff"
+      ? hufflepuffLogo
+      : house === "Slytherin"
+      ? slytherinLogo
+      : house === "Gryffindor"
+      ? gryffindorLogo
+      : house === "Ravenclaw"
+      ? ravenclawLogo
+      : OtherLogo;
+
   return (
-    <StyledCard house={house}>
-      <div className="card-content">
+    <StyledCard
+      id={wizard_data.id}
+      onClick={(e) => handleClick(e.target.id)}
+    >
+      <CardContent house={house}>
+        <h3>{name}</h3>
         {wizard_data.image && (
           <img
             src={wizard_data.image}
@@ -68,18 +114,18 @@ export const Card = ({ wizard_data }) => {
             }}
           />
         )}
-        <h3>{name}</h3>
-      </div>
+        <img src={logoSrc} className="cardLogo" />
+      </CardContent>
     </StyledCard>
   );
 };
 
 function App() {
   const [currentScore, setCurrentScore] = useState(0);
-  const [maximumScore, setMaximumScore] = useState(0);
+  const [highestScore, setHighestScore] = useState(0);
   const [activeCards, setActiveCards] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
-  const [level, setLevel] = useState(2);
+  const [level, setLevel] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
 
@@ -135,15 +181,53 @@ function App() {
     shuffleActiveCards();
   }, [currentScore]);
 
+  const levelUp = () => {
+    setLevel(level + 1);
+    setSelectedCards([]);
+  };
+
+  const gameOver = () => {
+    if (currentScore > highestScore) {
+      setHighestScore(currentScore);
+    }
+    setSelectedCards([]);
+    setLevel(0);
+    setLevel(1);
+    setCurrentScore(0);
+    // Force rerender
+  };
+
+  const handleClick = (id) => {
+    console.log(id);
+    if (!selectedCards.includes(id)) {
+      setCurrentScore(currentScore + 1);
+      setSelectedCards([...selectedCards, id]);
+      if (selectedCards.length === activeCards.length) {
+        levelUp();
+      }
+    } else {
+      gameOver();
+    }
+  };
+
   return (
     <div className="container">
-      <div className="header">Header</div>
-      <div className="gameboard">
+      <header className="header">
+        <span>Highest score: {highestScore}</span>
+        <span>Current score: {currentScore}</span>
+      </header>
+      <main className="gameboard">
         {activeCards.map((card) => {
           console.log(card);
-          return <Card wizard_data={card} key={card.id} />;
+          return (
+            <Card
+              wizard_data={card}
+              key={card.id}
+              handleClick={handleClick}
+            />
+          );
         })}
-      </div>
+      </main>
       <div className="footer">Footer</div>
     </div>
   );
