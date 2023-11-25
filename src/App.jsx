@@ -41,12 +41,12 @@ const StyledCard = styled.div`
   background-size: cover;
   padding: 1em;
   font-family: Henny Penny, sans-serif;
-  transition: transform 0.2s ease-in;
+  transition: transform 0.15s ease-in;
   animation: ${slideIn} 0.2s linear;
 
   &:hover {
     cursor: pointer;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   h3 {
     font-size: 2.5rem;
@@ -96,10 +96,7 @@ export const Card = ({ wizard_data, handleClick }) => {
       : OtherLogo;
 
   return (
-    <StyledCard
-      id={wizard_data.id}
-      onClick={(e) => handleClick(e.target.id)}
-    >
+    <StyledCard onClick={() => handleClick(wizard_data.id)}>
       <CardContent house={house}>
         <h3>{name}</h3>
         {wizard_data.image && (
@@ -154,6 +151,20 @@ function App() {
     setActiveCards(copy_arr);
   };
 
+  function areEqual(array1, array2) {
+    if (array1.length === array2.length) {
+      return array1.every((element, index) => {
+        if (element === array2[index]) {
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    return false;
+  }
+
   const fetchData = () => {
     fetch("https://hp-api.onrender.com/api/characters")
       .then((response) => response.json())
@@ -179,6 +190,12 @@ function App() {
 
   useEffect(() => {
     shuffleActiveCards();
+    if (selectedCards.length === activeCards.length) {
+      levelUp();
+    }
+    if (selectedCards.length === 18) {
+      setIsWinner(true);
+    }
   }, [currentScore]);
 
   const levelUp = () => {
@@ -191,7 +208,9 @@ function App() {
       setHighestScore(currentScore);
     }
     setSelectedCards([]);
-    setLevel(0);
+    if (level === 1) {
+      setLevel(0);
+    }
     setLevel(1);
     setCurrentScore(0);
     // Force rerender
@@ -202,9 +221,6 @@ function App() {
     if (!selectedCards.includes(id)) {
       setCurrentScore(currentScore + 1);
       setSelectedCards([...selectedCards, id]);
-      if (selectedCards.length === activeCards.length) {
-        levelUp();
-      }
     } else {
       gameOver();
     }
