@@ -14,6 +14,8 @@ import OtherLogo from "./assets/Other.png";
 
 // API link: https://hp-api.onrender.com/
 
+// CARD COMPONENT
+
 const COLORS = {
   Gryffindor: "#a02727",
   Slytherin: "#257b3f",
@@ -63,6 +65,7 @@ const CardContent = styled.div`
   border-width: 20px;
   border-radius: 2em;
   overflow: hide;
+  word-break: break-word;
   border-color: ${(props) =>
     props.house === "Slytherin"
       ? COLORS.Slytherin
@@ -114,6 +117,18 @@ export const Card = ({ wizard_data, handleClick }) => {
         <img src={logoSrc} className="cardLogo" />
       </CardContent>
     </StyledCard>
+  );
+};
+
+//GAME OVER component
+
+const GameOver = ({ isGameOver, isWinner }) => {
+  return (
+    <div className="gameover-screen">
+      <div className="gameover-content">
+        <img src="https://giphy.com/gifs/harry-potter-head-turn-12nfFCZA0vyrSw" />
+      </div>
+    </div>
   );
 };
 
@@ -190,13 +205,17 @@ function App() {
 
   useEffect(() => {
     shuffleActiveCards();
-    if (selectedCards.length === activeCards.length) {
-      levelUp();
-    }
-    if (selectedCards.length === 18) {
+
+    if (selectedCards.length === 3) {
       setIsWinner(true);
     }
-  }, [currentScore]);
+    if (
+      selectedCards.length === activeCards.length &&
+      selectedCards.length > 0
+    ) {
+      levelUp();
+    }
+  }, [selectedCards, activeCards]);
 
   const levelUp = () => {
     setLevel(level + 1);
@@ -208,12 +227,14 @@ function App() {
       setHighestScore(currentScore);
     }
     setSelectedCards([]);
+    // Force rerender
     if (level === 1) {
       setLevel(0);
     }
-    setLevel(1);
+
     setCurrentScore(0);
-    // Force rerender
+    setLevel(1);
+    isWinner ? setIsWinner(!isWinner) : null;
   };
 
   const handleClick = (id) => {
@@ -244,6 +265,7 @@ function App() {
           );
         })}
       </main>
+      <GameOver />
       <div className="footer">Footer</div>
     </div>
   );
