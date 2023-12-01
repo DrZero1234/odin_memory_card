@@ -123,10 +123,22 @@ export const Card = ({ wizard_data, handleClick }) => {
 //GAME OVER component
 
 const GameOver = ({ isGameOver, isWinner }) => {
+  const VICTORY_GIF_URLS = [
+    "https://media3.giphy.com/media/26BRzozg4TCBXv6QU/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://i.imgur.com/kY6AFyM.jpg",
+    "https://media2.giphy.com/media/wLBS2GlPDALS0/giphy.gif?cid=ecf05e47v3th935y30va3j4m63ystvg7mhgi601830d8d9pv&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+  ];
+
+  const LOSE_GIF_URLS = [
+    "https://media4.giphy.com/media/720g7C1jz13wI/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media2.giphy.com/media/12nfFCZA0vyrSw/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media0.giphy.com/media/NoBXm9gmqzx96/giphy.gif?cid=ecf05e47890li6xby2y4l7clxh0u4q8gjsmjjqdda6y8kbli&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+  ];
+
   return (
     <div className="gameover-screen">
       <div className="gameover-content">
-        <img src="https://giphy.com/gifs/harry-potter-head-turn-12nfFCZA0vyrSw" />
+        <img src={VICTORY_GIF_URLS[2]} className="gameover-gif" />
       </div>
     </div>
   );
@@ -254,18 +266,23 @@ function App() {
         <span>Current score: {currentScore}</span>
       </header>
       <main className="gameboard">
-        {activeCards.map((card) => {
-          console.log(card);
-          return (
-            <Card
-              wizard_data={card}
-              key={card.id}
-              handleClick={handleClick}
-            />
-          );
-        })}
+        {isGameOver || isWinner ? (
+          <GameOver />
+        ) : (
+          <>
+            {activeCards.map((card) => {
+              console.log(card);
+              return (
+                <Card
+                  wizard_data={card}
+                  key={card.id}
+                  handleClick={handleClick}
+                />
+              );
+            })}
+          </>
+        )}
       </main>
-      <GameOver />
       <div className="footer">Footer</div>
     </div>
   );
