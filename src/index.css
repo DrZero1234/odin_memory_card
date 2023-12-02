@@ -82,18 +82,21 @@ footer {
   background: red;
 }
 
+main {
+  padding: 5em;
+      background: url("./assets/background.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+}
+
 .gameboard {
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
     grid-auto-rows: 1fr;
-    width: 100%;
-    padding: 5em;
     place-content: center;
     gap: 1.5em;
-    background: url("./assets/background.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+
 }
 
 .cardLogo {
@@ -104,11 +107,16 @@ footer {
 .gameover-screen {
   width: 100%;
   height: 100%;
-}
-
-.gameover-content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
+.gameover-gif {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+
 

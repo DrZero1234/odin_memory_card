@@ -36,7 +36,7 @@ const slideIn = keyframes`
   }
 `;
 
-const StyledCard = styled.div`
+const HpCardTemplate = styled.div`
   background-image: url(${cardBg});
   background-repeat: no-repeat;
   background-position: center;
@@ -45,7 +45,9 @@ const StyledCard = styled.div`
   font-family: Henny Penny, sans-serif;
   transition: transform 0.15s ease-in;
   animation: ${slideIn} 0.2s linear;
+`;
 
+const StyledCard = styled(HpCardTemplate)`
   &:hover {
     cursor: pointer;
     transform: scale(1.05);
@@ -122,25 +124,59 @@ export const Card = ({ wizard_data, handleClick }) => {
 
 //GAME OVER component
 
-const GameOver = ({ isGameOver, isWinner }) => {
+const EndScreen = ({
+  isGameOver,
+  isWinner,
+  setIsWinner,
+  setIsGameOver,
+  currentScore,
+  highestScore,
+  restartGame,
+}) => {
   const VICTORY_GIF_URLS = [
     "https://media3.giphy.com/media/26BRzozg4TCBXv6QU/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
     "https://i.imgur.com/kY6AFyM.jpg",
     "https://media2.giphy.com/media/wLBS2GlPDALS0/giphy.gif?cid=ecf05e47v3th935y30va3j4m63ystvg7mhgi601830d8d9pv&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media4.giphy.com/media/VwUquCGtIatGg/giphy.gif?cid=ecf05e47q1ng51u2bx0lqp9h3kh1yesi2tsc3jdrnhg1xgdo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media1.giphy.com/media/qPCln5TSOsdRS/giphy.gif?cid=ecf05e474ef602paahxlcpj6ejskrdyaqu5tw9lcayza9yt6&ep=v1_gifs_search&rid=giphy.gif&ct=g",
   ];
 
   const LOSE_GIF_URLS = [
     "https://media4.giphy.com/media/720g7C1jz13wI/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
     "https://media2.giphy.com/media/12nfFCZA0vyrSw/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
     "https://media0.giphy.com/media/NoBXm9gmqzx96/giphy.gif?cid=ecf05e47890li6xby2y4l7clxh0u4q8gjsmjjqdda6y8kbli&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media3.giphy.com/media/d6Ni9aqSatPfq/giphy.gif?cid=ecf05e47n1vv6wnhpxkzen405tvdopa0vh217cmecaalpnb2&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media3.giphy.com/media/AisOYaOZdrS1i/giphy.gif?cid=ecf05e47bqzu1juikamcwnz31m7485h53vwnjmd4hlqmumer&ep=v1_gifs_search&rid=giphy.gif&ct=g",
   ];
 
+  const RANDOM_INDEX = Math.floor(
+    Math.random() * VICTORY_GIF_URLS.length
+  );
+  const gifSrc = isWinner
+    ? VICTORY_GIF_URLS[RANDOM_INDEX]
+    : LOSE_GIF_URLS[RANDOM_INDEX];
+
+  const StyledEndScreen = styled(HpCardTemplate)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-size: auto;
+    gap: 0.5em;
+  `;
+
   return (
-    <div className="gameover-screen">
-      <div className="gameover-content">
-        <img src={VICTORY_GIF_URLS[2]} className="gameover-gif" />
-      </div>
-    </div>
+    <StyledEndScreen>
+      <h2>{isWinner ? "You won!" : "You lose"}</h2>
+      {!isWinner ? (
+        <>
+          <h3>Your score: {currentScore}</h3>
+          <h4>Highest score: {highestScore}</h4>
+        </>
+      ) : null}
+      <img src={gifSrc} className="gameover-gif" />
+      <button onClick={() => restartGame()}>Restart</button>
+    </StyledEndScreen>
   );
 };
 
@@ -151,7 +187,7 @@ function App() {
   const [selectedCards, setSelectedCards] = useState([]);
   const [level, setLevel] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [isWinner, setIsWinner] = useState(false);
+  const [isWinner, setIsWinner] = useState(true);
 
   const getLevelCards = () => {
     switch (true) {
@@ -174,8 +210,17 @@ function App() {
   };
 
   const shuffleActiveCards = () => {
+    let temp = activeCards.slice();
     let copy_arr = activeCards.sort((a, b) => 0.5 - Math.random());
+    if (areEqual(temp, copy_arr)) {
+      copy_arr = activeCards.sort((a, b) => 0.5 - Math.random());
+    }
     setActiveCards(copy_arr);
+  };
+
+  const levelUp = () => {
+    setLevel(level + 1);
+    setSelectedCards([]);
   };
 
   function areEqual(array1, array2) {
@@ -218,7 +263,7 @@ function App() {
   useEffect(() => {
     shuffleActiveCards();
 
-    if (selectedCards.length === 3) {
+    if (selectedCards.length === 18) {
       setIsWinner(true);
     }
     if (
@@ -227,17 +272,9 @@ function App() {
     ) {
       levelUp();
     }
-  }, [selectedCards, activeCards]);
+  }, [selectedCards, activeCards, levelUp, shuffleActiveCards]);
 
-  const levelUp = () => {
-    setLevel(level + 1);
-    setSelectedCards([]);
-  };
-
-  const gameOver = () => {
-    if (currentScore > highestScore) {
-      setHighestScore(currentScore);
-    }
+  const restartGame = () => {
     setSelectedCards([]);
     // Force rerender
     if (level === 1) {
@@ -246,7 +283,8 @@ function App() {
 
     setCurrentScore(0);
     setLevel(1);
-    isWinner ? setIsWinner(!isWinner) : null;
+    setIsWinner(false);
+    setIsGameOver(false);
   };
 
   const handleClick = (id) => {
@@ -255,7 +293,10 @@ function App() {
       setCurrentScore(currentScore + 1);
       setSelectedCards([...selectedCards, id]);
     } else {
-      gameOver();
+      setIsGameOver(true);
+      if (currentScore > highestScore) {
+        setHighestScore(currentScore);
+      }
     }
   };
 
@@ -265,11 +306,19 @@ function App() {
         <span>Highest score: {highestScore}</span>
         <span>Current score: {currentScore}</span>
       </header>
-      <main className="gameboard">
+      <main>
         {isGameOver || isWinner ? (
-          <GameOver />
+          <EndScreen
+            isGameOver={isGameOver}
+            isWinner={isWinner}
+            setIsGameOver={setIsGameOver}
+            setIsWinner={setIsWinner}
+            currentScore={currentScore}
+            highestScore={highestScore}
+            restartGame={restartGame}
+          />
         ) : (
-          <>
+          <div className="gameboard">
             {activeCards.map((card) => {
               console.log(card);
               return (
@@ -280,7 +329,7 @@ function App() {
                 />
               );
             })}
-          </>
+          </div>
         )}
       </main>
       <div className="footer">Footer</div>
