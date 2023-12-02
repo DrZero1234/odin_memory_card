@@ -90,9 +90,29 @@ main {
         background-size: cover;
 }
 
+header {
+        background: url("./assets/HeaderBackground.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: Henny Penny, sans-serif;
+        display: flex;
+        justify-content: space-around;
+        color: #e5af38;
+}
+
+.header-subtext {
+  font-size: 1.5rem;
+}
+.header-maintext {
+  font-family: "Griffy";
+  font-size: 2rem;
+  font-weight: var(900);
+}
+
 .gameboard {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(275px,1fr));
     grid-auto-rows: 1fr;
     place-content: center;
     gap: 1.5em;
@@ -100,8 +120,8 @@ main {
 }
 
 .cardLogo {
-  max-width: 150px;
-  max-height: 150px;
+  max-width: 125px;
+  max-height: 125px;
 }
 
 .gameover-screen {
@@ -118,5 +138,63 @@ main {
   max-height: 400px;
 }
 
+.gameover-content-animated {
+    animation: fadeIn 2s ease-in 1;
+    -webkit-animation: fadeIn 2s ease-in 1;
+    -moz-animation: fadeIn 2s ease-in 1;
+    -o-animation: fadeIn 2s ease-in 1;
+    -ms-animation: fadeIn 2s ease-in 1;
+}
 
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  } 100% {
+    opacity: 1;
+  }  
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  100% {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 

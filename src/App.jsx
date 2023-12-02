@@ -12,6 +12,8 @@ import gryffindorLogo from "./assets/Gryffindor.png";
 import ravenclawLogo from "./assets/Ravenclaw.png";
 import OtherLogo from "./assets/Other.png";
 
+import titleText from "./assets/TitleText.png";
+
 // API link: https://hp-api.onrender.com/
 
 // CARD COMPONENT
@@ -53,7 +55,7 @@ const StyledCard = styled(HpCardTemplate)`
     transform: scale(1.05);
   }
   h3 {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;
 
@@ -79,7 +81,7 @@ const CardContent = styled.div`
       ? COLORS.Hufflepuff
       : COLORS.Other};
   padding: 0.5em;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
 
   h3 {
     text-align: center;
@@ -109,8 +111,8 @@ export const Card = ({ wizard_data, handleClick }) => {
             src={wizard_data.image}
             style={{
               display: "flex",
-              height: "200px",
-              width: "200px",
+              height: "150px",
+              width: "150px",
               objectFit: "cover",
               order: -1,
             }}
@@ -169,13 +171,23 @@ const EndScreen = ({
     <StyledEndScreen>
       <h2>{isWinner ? "You won!" : "You lose"}</h2>
       {!isWinner ? (
-        <>
+        <div className="gameover-content-animated">
+          <h3>Better luck next time</h3>
           <h3>Your score: {currentScore}</h3>
           <h4>Highest score: {highestScore}</h4>
-        </>
-      ) : null}
+        </div>
+      ) : (
+        <div className="gameover-content-animated">
+          <h3>Congratulations you completed the game!</h3>
+        </div>
+      )}
       <img src={gifSrc} className="gameover-gif" />
-      <button onClick={() => restartGame()}>Restart</button>
+      <button
+        className="gameover-content-animated btn-anim"
+        onClick={() => restartGame()}
+      >
+        Restart
+      </button>
     </StyledEndScreen>
   );
 };
@@ -303,8 +315,24 @@ function App() {
   return (
     <div className="container">
       <header className="header">
-        <span>Highest score: {highestScore}</span>
-        <span>Current score: {currentScore}</span>
+        <span className="header-subtext">
+          Level <span className="header-maintext">{level}</span>
+        </span>
+        <img
+          src={titleText}
+          alt="Header title"
+          style={{ maxWidth: "250px", maxHeight: "250px" }}
+        />
+        <div>
+          <span className="header-subtext">
+            Highest score:{" "}
+            <span className="header-maintext">{highestScore}</span>
+          </span>
+          <span className="header-subtext">
+            Current score:{" "}
+            <span className="header-maintext">{currentScore}</span>
+          </span>
+        </div>
       </header>
       <main>
         {isGameOver || isWinner ? (
