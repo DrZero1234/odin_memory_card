@@ -2,195 +2,36 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 
-import cardBg from "./assets/cardBg.jpg";
+import styled from "styled-components";
 
-import styled, { keyframes } from "styled-components";
+import { Header } from "./components/Header";
+import { Card } from "./components/Card";
+import { EndScreen } from "./components/EndScreen";
 
-import hufflepuffLogo from "./assets/Hufflepuff.png";
-import slytherinLogo from "./assets/Slytherin.png";
-import gryffindorLogo from "./assets/Gryffindor.png";
-import ravenclawLogo from "./assets/Ravenclaw.png";
-import OtherLogo from "./assets/Other.png";
+import { getLevelCards } from "./utils/getLevelCards";
 
-import titleText from "./assets/TitleText.png";
+import GithubLogo from "./assets/FooterGithub.svg?react";
+import ApiLogo from "./assets/FooterApi.svg?react";
+import { areEqualArrays } from "./utils/areEqualArrays";
 
-// API link: https://hp-api.onrender.com/
+// API link:
 
 // CARD COMPONENT
-
-const COLORS = {
-  Gryffindor: "#a02727",
-  Slytherin: "#257b3f",
-  Ravenclaw: "#0598b6",
-  Hufflepuff: "#cb9c27",
-  Other: "#808080",
-};
 
 /*
   background-color: 
 */
 
-const slideIn = keyframes`
-  from{
-    transform: scale(0);
-  } to {
-    transform: scale(1);
-  }
-`;
-
-const HpCardTemplate = styled.div`
-  background-image: url(${cardBg});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  padding: 1em;
-  font-family: Henny Penny, sans-serif;
-  transition: transform 0.15s ease-in;
-  animation: ${slideIn} 0.2s linear;
-`;
-
-const StyledCard = styled(HpCardTemplate)`
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-  }
-  h3 {
-    font-size: 2rem;
-  }
-`;
-
-const CardContent = styled.div`
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  border-style: solid;
-  border-width: 20px;
-  border-radius: 2em;
-  overflow: hide;
-  word-break: break-word;
-  border-color: ${(props) =>
-    props.house === "Slytherin"
-      ? COLORS.Slytherin
-      : props.house === "Gryffindor"
-      ? COLORS.Gryffindor
-      : props.house === "Ravenclaw"
-      ? COLORS.Ravenclaw
-      : props.house === "Hufflepuff"
-      ? COLORS.Hufflepuff
-      : COLORS.Other};
-  padding: 0.5em;
-  letter-spacing: 0.1em;
-
-  h3 {
-    text-align: center;
-  }
-`;
-
-export const Card = ({ wizard_data, handleClick }) => {
-  const { name, house } = wizard_data;
-
-  const logoSrc =
-    house === "Hufflepuff"
-      ? hufflepuffLogo
-      : house === "Slytherin"
-      ? slytherinLogo
-      : house === "Gryffindor"
-      ? gryffindorLogo
-      : house === "Ravenclaw"
-      ? ravenclawLogo
-      : OtherLogo;
-
+const Footer = () => {
   return (
-    <StyledCard onClick={() => handleClick(wizard_data.id)}>
-      <CardContent house={house}>
-        <h3>{name}</h3>
-        {wizard_data.image && (
-          <img
-            src={wizard_data.image}
-            style={{
-              display: "flex",
-              height: "150px",
-              width: "150px",
-              objectFit: "cover",
-              order: -1,
-            }}
-          />
-        )}
-        <img src={logoSrc} className="cardLogo" />
-      </CardContent>
-    </StyledCard>
+    <footer>
+      <ApiLogo />
+      <GithubLogo />
+    </footer>
   );
 };
 
 //GAME OVER component
-
-const EndScreen = ({
-  isGameOver,
-  isWinner,
-  setIsWinner,
-  setIsGameOver,
-  currentScore,
-  highestScore,
-  restartGame,
-}) => {
-  const VICTORY_GIF_URLS = [
-    "https://media3.giphy.com/media/26BRzozg4TCBXv6QU/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://i.imgur.com/kY6AFyM.jpg",
-    "https://media2.giphy.com/media/wLBS2GlPDALS0/giphy.gif?cid=ecf05e47v3th935y30va3j4m63ystvg7mhgi601830d8d9pv&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media4.giphy.com/media/VwUquCGtIatGg/giphy.gif?cid=ecf05e47q1ng51u2bx0lqp9h3kh1yesi2tsc3jdrnhg1xgdo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media1.giphy.com/media/qPCln5TSOsdRS/giphy.gif?cid=ecf05e474ef602paahxlcpj6ejskrdyaqu5tw9lcayza9yt6&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-  ];
-
-  const LOSE_GIF_URLS = [
-    "https://media4.giphy.com/media/720g7C1jz13wI/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media2.giphy.com/media/12nfFCZA0vyrSw/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media0.giphy.com/media/NoBXm9gmqzx96/giphy.gif?cid=ecf05e47890li6xby2y4l7clxh0u4q8gjsmjjqdda6y8kbli&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media3.giphy.com/media/d6Ni9aqSatPfq/giphy.gif?cid=ecf05e47n1vv6wnhpxkzen405tvdopa0vh217cmecaalpnb2&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-    "https://media3.giphy.com/media/AisOYaOZdrS1i/giphy.gif?cid=ecf05e47bqzu1juikamcwnz31m7485h53vwnjmd4hlqmumer&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-  ];
-
-  const RANDOM_INDEX = Math.floor(
-    Math.random() * VICTORY_GIF_URLS.length
-  );
-  const gifSrc = isWinner
-    ? VICTORY_GIF_URLS[RANDOM_INDEX]
-    : LOSE_GIF_URLS[RANDOM_INDEX];
-
-  const StyledEndScreen = styled(HpCardTemplate)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-size: auto;
-    gap: 0.5em;
-  `;
-
-  return (
-    <StyledEndScreen>
-      <h2>{isWinner ? "You won!" : "You lose"}</h2>
-      {!isWinner ? (
-        <div className="gameover-content-animated">
-          <h3>Better luck next time</h3>
-          <h3>Your score: {currentScore}</h3>
-          <h4>Highest score: {highestScore}</h4>
-        </div>
-      ) : (
-        <div className="gameover-content-animated">
-          <h3>Congratulations you completed the game!</h3>
-        </div>
-      )}
-      <img src={gifSrc} className="gameover-gif" />
-      <button
-        className="gameover-content-animated btn-anim"
-        onClick={() => restartGame()}
-      >
-        Restart
-      </button>
-    </StyledEndScreen>
-  );
-};
 
 function App() {
   const [currentScore, setCurrentScore] = useState(0);
@@ -199,32 +40,12 @@ function App() {
   const [selectedCards, setSelectedCards] = useState([]);
   const [level, setLevel] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [isWinner, setIsWinner] = useState(true);
-
-  const getLevelCards = () => {
-    switch (true) {
-      case level === 1:
-        return 3;
-      case level === 2:
-        return 6;
-      case level === 3:
-        return 9;
-      case level === 4:
-        return 12;
-      case level === 5:
-        return 15;
-      case level === 6:
-        return 18;
-      case level > 6:
-        console.log("Winner");
-        break;
-    }
-  };
+  const [isWinner, setIsWinner] = useState(false);
 
   const shuffleActiveCards = () => {
     let temp = activeCards.slice();
     let copy_arr = activeCards.sort((a, b) => 0.5 - Math.random());
-    if (areEqual(temp, copy_arr)) {
+    if (areEqualArrays(temp, copy_arr)) {
       copy_arr = activeCards.sort((a, b) => 0.5 - Math.random());
     }
     setActiveCards(copy_arr);
@@ -235,20 +56,6 @@ function App() {
     setSelectedCards([]);
   };
 
-  function areEqual(array1, array2) {
-    if (array1.length === array2.length) {
-      return array1.every((element, index) => {
-        if (element === array2[index]) {
-          return true;
-        }
-
-        return false;
-      });
-    }
-
-    return false;
-  }
-
   const fetchData = () => {
     fetch("https://hp-api.onrender.com/api/characters")
       .then((response) => response.json())
@@ -256,7 +63,7 @@ function App() {
         const arr_range = 24;
         let copy_arr = [];
         let used_indexes = [];
-        while (copy_arr.length < getLevelCards()) {
+        while (copy_arr.length < getLevelCards(level)) {
           let random_index = Math.floor(Math.random() * arr_range);
           while (used_indexes.includes(random_index)) {
             random_index = Math.floor(Math.random() * arr_range);
@@ -300,7 +107,6 @@ function App() {
   };
 
   const handleClick = (id) => {
-    console.log(id);
     if (!selectedCards.includes(id)) {
       setCurrentScore(currentScore + 1);
       setSelectedCards([...selectedCards, id]);
@@ -314,26 +120,11 @@ function App() {
 
   return (
     <div className="container">
-      <header className="header">
-        <span className="header-subtext">
-          Level <span className="header-maintext">{level}</span>
-        </span>
-        <img
-          src={titleText}
-          alt="Header title"
-          style={{ maxWidth: "250px", maxHeight: "250px" }}
-        />
-        <div>
-          <span className="header-subtext">
-            Highest score:{" "}
-            <span className="header-maintext">{highestScore}</span>
-          </span>
-          <span className="header-subtext">
-            Current score:{" "}
-            <span className="header-maintext">{currentScore}</span>
-          </span>
-        </div>
-      </header>
+      <Header
+        highestScore={highestScore}
+        currentScore={currentScore}
+        level={level}
+      />
       <main>
         {isGameOver || isWinner ? (
           <EndScreen
@@ -348,7 +139,6 @@ function App() {
         ) : (
           <div className="gameboard">
             {activeCards.map((card) => {
-              console.log(card);
               return (
                 <Card
                   wizard_data={card}
@@ -360,7 +150,7 @@ function App() {
           </div>
         )}
       </main>
-      <div className="footer">Footer</div>
+      <Footer />
     </div>
   );
 }
