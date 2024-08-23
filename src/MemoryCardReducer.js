@@ -22,6 +22,13 @@ export const memeoryCardReducer = (state,action) => {
                 selectedCards: [],
             }
         }
+
+        case "highestScore" : {
+            return {
+                ...state,
+                highestScore: state.currentScore
+            }
+        }
     }
     throw Error (`Unknown action ${action.type}`)
 }
