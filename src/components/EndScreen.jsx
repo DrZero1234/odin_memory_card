@@ -16,15 +16,15 @@ const StyledEndScreen = styled(HpCardTemplate)`
   }
 `;
 
-export const EndScreen = ({
-  isGameOver,
-  isWinner,
-  setIsWinner,
-  setIsGameOver,
-  currentScore,
-  highestScore,
-  restartGame,
-}) => {
+export const EndScreen = ({ state, restartGame }) => {
+  const {
+    isGameOver,
+    isWinner,
+    setIsWinner,
+    setIsGameOver,
+    currentScore,
+    highestScore,
+  } = state;
   const VICTORY_GIF_URLS = [
     "https://media3.giphy.com/media/26BRzozg4TCBXv6QU/giphy.gif?cid=ecf05e47qbq5eozq0mufvn3gls28k9ro6j3ydobsek3g60nc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
     "https://i.imgur.com/kY6AFyM.jpg",
